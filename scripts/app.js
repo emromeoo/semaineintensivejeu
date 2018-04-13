@@ -3,6 +3,8 @@ let background = document.querySelector(".background")
 let stopDetection = ""
 let minX = 0
 let maxX = 1350
+
+// création des collisions
 let obstacles =  [
   {ymin:120, ymax: 190, xmin: 60, xmax:190},
   {ymin:170, ymax: 350, xmin: 550, xmax:670},
@@ -18,17 +20,20 @@ let obstacles =  [
   {ymin:-120, ymax: -40, xmin: -70, xmax:40},
   {ymin:-70, ymax: 661, xmin: 1380, xmax:1450},
 
- //chaises grise en haut
+ //collisions de la map
 ]
 
 
-
+// position de départ du joueur
 let posY = 300
 let posX =1100
+// les variables
 let dir=0
 let press = false
 let mauvais =document.querySelector("#mauvais")
 let bon =document.querySelector("#bon")
+
+// création du personnage
 function generatePerso(){
 perso = document.getElementById("perso")
 
@@ -38,14 +43,40 @@ if (dir == 0) {
 perso.style.imageOrientation="flip"
 }
 
+// choix de l'image à éviter
+
+//let mechant = ['images/julien.png','images/mauvais.gif','images/mauvais2.gif','images/mauvais3.gif']
+//let goods = ['images/bon.gif','images/francesca.png']
+/*function julien(){
+  let mechantRandom = Math.floor(Math.random()*1000)
+  if (mechantRandom <1) {
+    creatureM.style.background = mechant[0]
+  }
+  let numRandom = Math.floor(Math.random()*(mechant.length - 1))
+  creatureM.style.background = mechant[numRandom+1]
+}
+
+// choix de l'image à ramasser
+function francesca(){
+  let randomGoods = Math.floor(Math.random()*1000)
+  if (randomGoods < 1) {
+    creatureG.style.background = goods[1]
+  }
+  else {
+    creatureG.style.background = goods[0]
+  }
+}*/
+
+// changement d'état au clic du bouton "play"
+
 let jouer = document.querySelector('h2')
 jouer.addEventListener('click', function(){
-  document.querySelector('.Jeu').style.display =  'none'
+  document.querySelector('.Jeu').style.display =  'none'  // changement d'état
   document.querySelector(".jeuxX").style.display = "block"
 },false )
 
 
-
+// fonction de déplacement du personnage
 let deplacement = ()=> {
 
   window.addEventListener(
@@ -55,7 +86,7 @@ let deplacement = ()=> {
 
 
       console.log(collaps())
-      if (e.keyCode==100){
+      if (e.keyCode==100){            // déplacepment à l'enfoncement de certaines touches
         if(collaps(posX+1, posY)){
           posX += 10
           perso.style.left = posX + "px"
@@ -63,7 +94,7 @@ let deplacement = ()=> {
           press = true
         }
       }
-      else if (e.keyCode==113){
+      else if (e.keyCode==11){
         console.log(dir)
         if(collaps(posX-1, posY)){
           posX -=10
@@ -92,6 +123,8 @@ let deplacement = ()=> {
 
 }
 deplacement();
+
+//fonction de collision
 function collaps(posX, posY) {
   for (let i = 0; i < obstacles.length; i++) {
     if ((posX > obstacles[i].xmin && posX < obstacles[i].xmax)  && (posY > obstacles[i].ymin && posY < obstacles[i].ymax)){
@@ -103,18 +136,18 @@ function collaps(posX, posY) {
 
 
 
-
+// affichage des personnages bon et mauvais
 
 function afficheElements()
 {
 stopDetection = 0;
-let elemX = Math.floor(Math.random()*1350 );
+let elemX = Math.floor(Math.random()*1350 ); // position de l'image
 let elemY = Math.floor(Math.random()*650);
-let elemType = Math.floor(Math.random()*2);
+let elemType = Math.floor(Math.random()*2); // choix du type d'image
 if (elemType == 0)
 {
-
-  bon.style.left=elemX+"px"
+  //francesca()                     // appel de la fonction
+  bon.style.left=elemX+"px"           // positionnement de l'image
   bon.style.top=elemY+"px"
   bon.style.display = "block"
 
@@ -122,16 +155,16 @@ if (elemType == 0)
 }
 else
  {
-
+   //julien()
   mauvais.style.left=elemX+"px"
   mauvais.style.top=elemY+"px"
   mauvais.style.display = "block"
-  bon.style.display = "none"
+  bon.style.display = "none"        // supprime l'image bonne, nécessite plus de rapidité
     console.log(elemX,elemY)
 }
 }
 
-function collisions()
+function collisions()         // collision entre les personnages
  {
    posX = parseInt($('#perso').css('left'));
    posY = parseInt($('#perso').css('top'));
@@ -157,6 +190,7 @@ function collisions()
        var score = parseInt($('#info3').text())+5;
        $('#info3').text(score);
        $('#bon').css('display', 'none');
+       //youWin()
      }
      else
      {
@@ -165,10 +199,42 @@ function collisions()
        let score = parseInt($('#info3').text())-5;
        $('#info3').text(score);
        $('#mauvais').css('display', 'none');
+       //gameOver()
      }
    }
  }
 
 
- setInterval(afficheElements, 5000);
- setInterval(collisions, 500);
+ setInterval(afficheElements, 5000);    // temps entre deux images à afficher
+ setInterval(collisions, 500);          //interval de regardde collision
+
+/*
+ function gameOver(){
+   if (nbMauvais == 3 || julien == 1 ) {
+     setTimeOut(
+       function  lose(){
+         rouge.style.display = "inline-block"
+         tableau.style.display = 'inline-block'
+       },8000
+     )
+     rouge.style.display = 'none'
+     document.querySelector('.Jeu').style.display =  'none' // changement d'état
+     document.querySelector(".jeuxX").style.display = "block"
+   }
+
+ }
+
+ function youWin(){
+   if (tabScore == 25 || francesca == 1 || userName == 'OnEstDansLaMerde' ) {
+     setTimeOut(
+       function  win(){
+         vert.style.display = "inline-block"
+         tableau.style.display = 'inline-block'
+       },8000
+     )
+     vert.style.display = 'none'
+     document.querySelector('.Jeu').style.display =  'none' // changement d'état
+     document.querySelector(".jeuxX").style.display = "block"
+   }
+
+ }*/
