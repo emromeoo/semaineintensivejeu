@@ -63,7 +63,7 @@ let deplacement = ()=> {
           press = true
         }
       }
-      else if (e.keyCode==97){
+      else if (e.keyCode==113){
         console.log(dir)
         if(collaps(posX-1, posY)){
           posX -=10
@@ -72,7 +72,7 @@ let deplacement = ()=> {
           press = true
         }
        }
-       else if (e.keyCode == 119){
+       else if (e.keyCode == 122){
          if(collaps(posX, posY-1)){
            posY -=10
            perso.style.top = posY + "px"
